@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'ThingsMenu' target in the 'ThingsMenu' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
