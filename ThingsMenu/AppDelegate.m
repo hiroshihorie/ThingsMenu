@@ -3,7 +3,7 @@
 //  ThingsMenu
 //
 //  Created by Hiroshi Horie on 2013/03/27.
-//  Copyright (c) 2013年 Mobiq, Inc. All rights reserved.
+//  Copyright (c) 2013 mobiq, Inc. All rights reserved.
 //
 
 #import "AppDelegate.h"
@@ -15,7 +15,7 @@
 
 NSInteger const kTagTask = 10;
 
-@interface AppDelegate()
+@interface AppDelegate ()
 - (void)clearMenu;
 @end
 
@@ -30,7 +30,7 @@ NSInteger const kTagTask = 10;
     NSImage *exitImage = [NSImage imageNamed:@"icon-exit"];
     [exitImage setTemplate:YES];
     
-    NSString *version = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
+//    NSString *version = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
     
     _statusMenu = [[NSMenu alloc] init];
     _statusMenu.delegate = self;
@@ -54,9 +54,9 @@ NSInteger const kTagTask = 10;
 //    menuItem = [_statusMenu addItemWithTitle:NSLocalizedString(@"Preferences...", nil) action:@selector(preferencesAction:) keyEquivalent:@""];
 //    [menuItem setImage:gearImage];
 
-    menuItem = [_statusMenu addItemWithTitle:[NSString stringWithFormat:
-                                              NSLocalizedString(@"ThingsMenu(%@) Check for Updates...", nil), version]
-                                      action:@selector(checkForUpdates:) keyEquivalent:@""];
+//    menuItem = [_statusMenu addItemWithTitle:[NSString stringWithFormat:
+//                                              NSLocalizedString(@"ThingsMenu(%@) Check for Updates...", nil), version]
+//                                      action:@selector(checkForUpdates:) keyEquivalent:@""];
 //    [menuItem setImage:exitImage];
 
     menuItem = [_statusMenu addItemWithTitle:NSLocalizedString(@"Quit", nil) action:@selector(quitAction:) keyEquivalent:@""];
@@ -148,17 +148,15 @@ NSInteger const kTagTask = 10;
     }
 
     
-    NSDictionary *taskAttributes = @{
-                                     NSForegroundColorAttributeName: [NSColor blackColor],
-                                     NSFontAttributeName: [NSFont systemFontOfSize:14.0f],
+    NSDictionary *taskAttributes = @{ NSForegroundColorAttributeName: [NSColor blackColor],
+                                      NSFontAttributeName: [NSFont systemFontOfSize:14.0f],
                                      //NSParagraphStyleAttributeName
                                      };
     
     //NSMutableParagraphStyle *p = [[NSMutableParagraphStyle alloc] init];
     
-    NSDictionary *projectAttributes = @{
-                                        NSForegroundColorAttributeName: [NSColor grayColor],
-                                        NSFontAttributeName: [NSFont systemFontOfSize:10.0f],
+    NSDictionary *projectAttributes = @{ NSForegroundColorAttributeName: [NSColor grayColor],
+                                         NSFontAttributeName: [NSFont systemFontOfSize:10.0f],
                                         //NSParagraphStyleAttributeName: p,
                                         };
 
@@ -198,16 +196,14 @@ NSInteger const kTagTask = 10;
         if (task[@"ZNOTES"] != [NSNull null] ) {
             NSMenu *subMenu = [[NSMenu alloc] init];
             NSMenuItem *subMenuItem = [[NSMenuItem alloc] init];
-            NSData *noteData = [task[@"ZNOTES"] dataUsingEncoding:NSUTF8StringEncoding];
-            NSAttributedString *attributedNote = [[NSAttributedString alloc] initWithHTML:noteData options:nil documentAttributes:nil];
+            NSData *noteData = [task[@"ZNOTES"] dataUsingEncoding:NSUnicodeStringEncoding];
+            NSAttributedString *attributedNote = [[NSAttributedString alloc] initWithHTML:noteData documentAttributes:nil];
             NSLog(@"a : %@", attributedNote);
             subMenuItem.attributedTitle = attributedNote;
             [subMenu addItem:subMenuItem];
             [menuItem setSubmenu:subMenu];
         }
         
-        
-        //[_statusMenu addItem:[NSMenuItem separatorItem]];
     }
 
     NSMenuItem *menuItem = [_statusMenu itemWithTag:kTagTask];
@@ -236,7 +232,7 @@ NSInteger const kTagTask = 10;
     }
 }
 - (void)checkForUpdates:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://mobiq-inc.com/thingsmenu"]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://mobiq-ltd.com/thingsmenu"]];
 }
 
 @end
