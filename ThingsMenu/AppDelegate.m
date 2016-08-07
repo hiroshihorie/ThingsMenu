@@ -15,6 +15,35 @@
 
 NSInteger const kTagTask = 10;
 
+@implementation NSColor (Extension)
+
+- (NSString *)hexadecimalValue {
+    
+    double redFloatValue, greenFloatValue, blueFloatValue;
+    int redIntValue, greenIntValue, blueIntValue;
+    NSString *redHexValue, *greenHexValue, *blueHexValue;
+    
+    NSColor *convertedColor = [self colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+    
+    if(convertedColor) {
+        [convertedColor getRed:&redFloatValue green:&greenFloatValue blue:&blueFloatValue alpha:NULL];
+        
+        redIntValue = redFloatValue*255.99999f;
+        greenIntValue = greenFloatValue*255.99999f;
+        blueIntValue = blueFloatValue*255.99999f;
+        
+        redHexValue = [NSString stringWithFormat:@"%02x", redIntValue];
+        greenHexValue = [NSString stringWithFormat:@"%02x", greenIntValue];
+        blueHexValue = [NSString stringWithFormat:@"%02x", blueIntValue];
+        
+        return [NSString stringWithFormat:@"#%@%@%@", redHexValue, greenHexValue, blueHexValue];
+    }
+    
+    return nil;
+}
+
+@end
+
 @interface AppDelegate ()
 - (void)clearMenu;
 @end
@@ -34,7 +63,7 @@ NSInteger const kTagTask = 10;
     
     _statusMenu = [[NSMenu alloc] init];
     _statusMenu.delegate = self;
-    _statusMenu.font = [NSFont systemFontOfSize:12.0f];
+    _statusMenu.font = [NSFont systemFontOfSize:16.0f];
     //_statusMenu.autoenablesItems = NO;
     
     _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
@@ -148,15 +177,15 @@ NSInteger const kTagTask = 10;
     }
 
     
-    NSDictionary *taskAttributes = @{ NSForegroundColorAttributeName: [NSColor blackColor],
-                                      NSFontAttributeName: [NSFont systemFontOfSize:14.0f],
+    NSDictionary *taskAttributes = @{ NSForegroundColorAttributeName: [NSColor selectedMenuItemTextColor],
+                                      NSFontAttributeName: [NSFont systemFontOfSize:16.0f],
                                      //NSParagraphStyleAttributeName
                                      };
     
     //NSMutableParagraphStyle *p = [[NSMutableParagraphStyle alloc] init];
     
-    NSDictionary *projectAttributes = @{ NSForegroundColorAttributeName: [NSColor grayColor],
-                                         NSFontAttributeName: [NSFont systemFontOfSize:10.0f],
+    NSDictionary *projectAttributes = @{ NSForegroundColorAttributeName: [[NSColor selectedMenuItemTextColor] colorWithAlphaComponent:0.5f],
+                                         NSFontAttributeName: [NSFont systemFontOfSize:13.0f],
                                         //NSParagraphStyleAttributeName: p,
                                         };
 
@@ -196,7 +225,13 @@ NSInteger const kTagTask = 10;
         if (task[@"ZNOTES"] != [NSNull null] ) {
             NSMenu *subMenu = [[NSMenu alloc] init];
             NSMenuItem *subMenuItem = [[NSMenuItem alloc] init];
-            NSData *noteData = [task[@"ZNOTES"] dataUsingEncoding:NSUnicodeStringEncoding];
+            
+            NSString *menuString = [NSString stringWithFormat:@"<span style='font-family: \"%@\"; font-size:16px; color:%@; '>%@</span>",
+                                    [NSFont systemFontOfSize:16.0f].fontName,
+                                    [[NSColor selectedMenuItemTextColor] hexadecimalValue],
+                                    task[@"ZNOTES"]];
+            
+            NSData *noteData = [menuString dataUsingEncoding:NSUnicodeStringEncoding];
             NSAttributedString *attributedNote = [[NSAttributedString alloc] initWithHTML:noteData documentAttributes:nil];
             NSLog(@"a : %@", attributedNote);
             subMenuItem.attributedTitle = attributedNote;
